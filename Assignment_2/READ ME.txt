@@ -1,0 +1,14 @@
+Documentation for Assignment 2
+
+The algorithm works by using a binary search to find a word with the matching prefix,
+then using a linear search to find all words with that prefix. The linear search goes in
+both directions of the array to reduce time complexity. 
+
+To help the binary search find the target faster the search index starts at the
+length of the dictionary/26 * the first letter of the prefix.
+
+It was assumed that the dictionary would be in alphabetical order. 
+
+Please note that the word list I used counted 'y' as being after 'j' in alphabetical order.
+Without the words.sort() call in GenerateWordArray() prefixes containing a 'y' will not
+work. 

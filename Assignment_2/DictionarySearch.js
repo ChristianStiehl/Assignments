@@ -1,26 +1,25 @@
-"use strict";
+var dictionary = GenerateWordArray();
 
 function GenerateWordArray()
 {
 	var fileSystem = require('fs');
 	var words = fileSystem.readFileSync("./words.txt").toString().split("\n");
+	words.sort();
 	return words;
 }
 
-function BinarySearch(a_Dictionary, a_Prefix)
+function BinarySearch(a_Prefix)
 {
-	var dictionary = a_Dictionary;
 	var prefix = a_Prefix;
-
 	var low = 0;
 	var high = dictionary.length-1;
-	var mid = Math.round((dictionary.length/26) * (prefix.charCodeAt(0)-96)) -1;
+	var mid = Math.round((high/26) * (prefix.charCodeAt(0)-96));
 
 	while (low <= high)
 	{
 		if(dictionary[mid].startsWith(prefix))
 		{
-			return LinearSearch(dictionary, prefix, mid);
+			return LinearSearch(prefix, mid);
 		}
 		else if(dictionary[mid] < prefix)
 		{
@@ -38,21 +37,14 @@ function BinarySearch(a_Dictionary, a_Prefix)
 	return -1;
 }
 
-function LinearSearch(a_Dictionary, a_Prefix, a_Index)
+function LinearSearch(a_Prefix, a_Index)
 {
 	var words = [];
-	var dictionary = a_Dictionary;
 	var prefix = a_Prefix;
 	var upIndex = a_Index;
 	var downIndex = upIndex-1;
 	var upFinished = false;
 	var downFinished = false;
-
-	if(upIndex == 0)
-	{
-		downIndex = 0;
-		downFinished = true;
-	}
 
 	while(!upFinished || !downFinished)
 	{
@@ -91,8 +83,8 @@ function LinearSearch(a_Dictionary, a_Prefix, a_Index)
 
 	}
 
-	console.log("Found " +words.length +" words with prefix: " +prefix);
+	console.log("Found " +words.length +" words with prefix " +prefix);
 	return words;
 }
 
-BinarySearch(GenerateWordArray(), "tr");
+BinarySearch("tab");
