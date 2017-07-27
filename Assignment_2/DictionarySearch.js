@@ -1,4 +1,5 @@
 var dictionary = GenerateWordArray();
+var prefix = "tab";
 
 function GenerateWordArray()
 {
@@ -8,9 +9,8 @@ function GenerateWordArray()
 	return words;
 }
 
-function BinarySearch(a_Prefix)
+function BinarySearch()
 {
-	var prefix = a_Prefix;
 	var low = 0;
 	var high = dictionary.length-1;
 	var mid = Math.round((high/26) * (prefix.charCodeAt(0)-96));
@@ -19,7 +19,7 @@ function BinarySearch(a_Prefix)
 	{
 		if(dictionary[mid].startsWith(prefix))
 		{
-			return LinearSearch(prefix, mid);
+			return LinearSearch(mid);
 		}
 		else if(dictionary[mid] < prefix)
 		{
@@ -37,10 +37,9 @@ function BinarySearch(a_Prefix)
 	return -1;
 }
 
-function LinearSearch(a_Prefix, a_Index)
+function LinearSearch(a_Index)
 {
 	var words = [];
-	var prefix = a_Prefix;
 	var upIndex = a_Index;
 	var downIndex = upIndex-1;
 	var upFinished = false;
@@ -87,4 +86,4 @@ function LinearSearch(a_Prefix, a_Index)
 	return words;
 }
 
-BinarySearch("tab");
+BinarySearch();
