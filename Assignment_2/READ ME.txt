@@ -1,3 +1,7 @@
+------------------------------------------------------------------------------------
+The word list used for this assignment was taken from github.com/dwyl/english-words
+------------------------------------------------------------------------------------
+
 Documentation for Assignment 2
 
 The algorithm works by using a binary search to find a word with the matching prefix,
@@ -7,8 +11,13 @@ both directions of the array to reduce time complexity.
 To help the binary search find the target faster the search index starts at the
 length of the dictionary/26 * the first letter of the prefix.
 
-It was assumed that the dictionary would be in alphabetical order. 
+After a clarification it was clear that the dictionary would not be in alphabetical order,
+however I decided not to change the algorithm for the following reason; the algorithm
+itself is very efficient and the sort only needs to happen once. So only when the search 
+needs to happen once this algorithm is less efficient than other options. When the search
+needs to happen multiple times over the course of one run, the algorithm will be very efficient.
 
-Please note that the word list I used counted 'y' as being after 'j' in alphabetical order.
-Without the words.sort() call in GenerateWordArray() prefixes containing a 'y' will not
-work. 
+While debating whether or not to change the algorithm and figuring out which algorithm to use
+instead, a prefix tree was considered as it would most likely be more efficient in all instances.
+However I liked my first solution as it shows my thought process behind tackeling the problem.
+Sticking with my first solution also gave me more time to work on the first assignment. 

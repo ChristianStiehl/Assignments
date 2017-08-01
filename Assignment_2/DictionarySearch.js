@@ -1,5 +1,4 @@
 var dictionary = GenerateWordArray();
-var prefix = "tab";
 
 function GenerateWordArray()
 {
@@ -9,7 +8,7 @@ function GenerateWordArray()
 	return words;
 }
 
-function BinarySearch()
+function BinarySearch(prefix)
 {
 	var low = 0;
 	var high = dictionary.length-1;
@@ -19,7 +18,7 @@ function BinarySearch()
 	{
 		if(dictionary[mid].startsWith(prefix))
 		{
-			return LinearSearch(mid);
+			return LinearSearch(mid, prefix);
 		}
 		else if(dictionary[mid] < prefix)
 		{
@@ -34,13 +33,13 @@ function BinarySearch()
 	}
 
 	console.log("Found 0 words with prefix " +prefix);
-	return -1;
+	return;
 }
 
-function LinearSearch(a_Index)
+function LinearSearch(index, prefix)
 {
-	var words = [];
-	var upIndex = a_Index;
+	var foundWords = [];
+	var upIndex = index;
 	var downIndex = upIndex-1;
 	var upFinished = false;
 	var downFinished = false;
@@ -51,39 +50,52 @@ function LinearSearch(a_Index)
 		{
 			if(dictionary[upIndex].startsWith(prefix))
 			{
-				words[words.length] = dictionary[upIndex];
+				foundWords[foundWords.length] = dictionary[upIndex];
 				upIndex ++;
-				if(upIndex > dictionary.length-1)
-				{
-					upFinished = true;
-				}
 			}
 			else 
 			{
 				upFinished = true;
 			}
 		}
+		else if(upIndex > dictionary.length-1)
+		{
+			upFinished = true;
+		}
 
 		if(!downFinished && dictionary[downIndex])
 		{
 			if(dictionary[downIndex].startsWith(prefix))
 			{
-				words[words.length] = dictionary[downIndex];
+				foundWords[foundWords.length] = dictionary[downIndex];
 				downIndex --;
-				if(downIndex < 0)
-				{
-					downFinished = true;
-				}
 			}
 			else {
 				downFinished = true;
 			}
 		}
 
+		else if(downIndex < 0)
+		{
+			downFinished = true;
+		}
+
 	}
 
-	console.log("Found " +words.length +" words with prefix " +prefix);
-	return words;
+	console.log("Found " +foundWords.length +" words with prefix " +prefix);
+	return foundWords;
 }
 
-BinarySearch();
+BinarySearch("tab");
+BinarySearch("da");
+BinarySearch("t");
+BinarySearch("ar");
+BinarySearch("vet");
+BinarySearch("yt");
+BinarySearch("kr");
+BinarySearch("able");
+BinarySearch("car");
+BinarySearch("a");
+BinarySearch("bin");
+BinarySearch("est");
+BinarySearch("zw");

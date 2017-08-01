@@ -1,2 +1,29 @@
+------------------------------------------------------------------------
+All art assets used in this assignment are taken from Kenney.nl
+All audio assets used in this assignment are taken from dl-sounds.com
+------------------------------------------------------------------------
+
 Documentation for Assignment 1
+
+The game itself is very straight forward, the physics aspect is handled mostly by 
+Phasers P2 physics system. 
+
+While working on the game I wanted to learn as much as possible about the features offered by
+Phaser, learning functions and features that appear often in games. Some basic examples of 
+this are audio, spritesheets, tweening and vector calculations.
+
+Some more advanced examples are the texture cropping for the arrow indicator, 
+this is something I wanted to know how to do as it is extremely handy when developing 
+mobile games (progress bars & health bars etc.), and some light optimalization 
+(disabling debug and clearBeforeRender, setting texture priorities etc.)
+
+The code itself is still very messy and not of sufficient production quality. However
+I am sure that I can learn to produce better and more structured code when provided
+with some coding guidelines and mentoring by a potential employer.
+
+I definitely spent more time on the small details and little things than the main
+gameplay and physics aspect, I feel like this is a good representation of what I like in
+game development. Polishing a game to make it feel fun to play is a key aspect of making
+a good game in my opinion, of course polishing can only take a game so far, and it should 
+always go hand in hand with great fundamentals and mechanics. 
 
