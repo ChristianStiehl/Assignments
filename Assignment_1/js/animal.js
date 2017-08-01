@@ -7,9 +7,11 @@ function Animal(posX, posY, spriteIndex)
 	animal.scale.setTo(0.75, 0.75);
 	animal.anchor.setTo(0.5, 0.5);
 	animal.inputEnabled = true;
-	game.physics.arcade.enable(animal);
-	animal.body.allowGravity = false;
-	animal.body.immovable = true;
+	game.physics.p2.enable(animal);
+	animal.body.setCircle(animal.width/2);
+	animal.body.static = true;
+
+	animal.body.onBeginContact.add(collisionCallback, this);
 
 	this.update = function()
 	{
@@ -37,14 +39,16 @@ function Animal(posX, posY, spriteIndex)
 				game.add.tween(dot.scale).to({x: scale, y: scale}, 300, Phaser.Easing.Linear.None, true);
 				dot.anchor.setTo(0.5, 0.5);
 				dot.tint = 0xffffff;
+
 				if(addToDots1)
 				{
 					dots1.add(dot);
-					}
+				}
 				else
 				{
 					dots2.add(dot);
 				}
+
 				dotTimer = 0;
 			}
 			else 
@@ -56,9 +60,11 @@ function Animal(posX, posY, spriteIndex)
 
 	this.launch = function()
 	{
-		animal.body.allowGravity = true;
-		animal.body.immovable = false;
-		game.physics.arcade.velocityFromAngle(arrow.angle, power*7.5, animal.body.velocity);
+		animal.body.static = false;
+		velocity = new Phaser.Point((Math.cos(game.math.degToRad(arrow.angle)) * (power*7.5)), (Math.sin(game.math.degToRad(arrow.angle)) * (power*7.5)));
+		animal.body.velocity.x = velocity.x;
+		animal.body.velocity.y = velocity.y;
+
 
 		traveling = true;
 		leaveDots = true;
@@ -87,75 +93,56 @@ function Animal(posX, posY, spriteIndex)
 		{
 			dots1.destroy(true, true);
 		}
-		animal.reset(250, game.height-155);
-		animal.body.allowGravity = false;
-		animal.body.immovable = true;
+		animal.reset(250, 595);
+		animal.body.static = true;
 		traveling = false;
 		leaveDots = false;
 		game.camera.reset();
-		animal.angle = 0;
+		animal.body.angle = 0;
 	};
-	this.hitObstacleCallback = function(a_animal, a_obstacle)
+}
+
+function collisionCallback (body, bodyb, shapea, shapeb, equation)
+{
+	leaveDots = false;
+	//better way for this
+	if(body.sprite.key == "blocks")
 	{
-		//p2 physics happen here
-		if(a_obstacle.frame == 51 || a_obstacle.frame == 47)
+		if(body.sprite.frame == 51 || body.sprite.frame == 47)
 		{
-			a_obstacle.destroy();
+			body.sprite.destroy();
 		}
 		else {
-			leaveDots = false;
-			a_animal.body.velocity.x *= -0.5;
-
-			if(a_obstacle.frame == 24)
+			//if the sprite sheet was organized better a_obstacle.frame++ could be used instead of if statement mess.
+			if(body.sprite.frame == 24)
 			{
-				a_obstacle.frame = 51;
+				body.sprite.frame = 51;
 			}
 
-			if(a_obstacle.frame == 19)
+			if(body.sprite.frame == 19)
 			{
-				a_obstacle.frame = 24;
+				body.sprite.frame = 24;
 			}
 
-			if(a_obstacle.frame == 15)
+			if(body.sprite.frame == 15)
 			{
-				a_obstacle.frame = 47;
+				body.sprite.frame = 47;
 			}
 			
-			if(a_obstacle.frame == 12)
+			if(body.sprite.frame == 12)
 			{
-				a_obstacle.frame = 15;
+				body.sprite.frame = 15;
 			}
 		}
-	};
+	}
 
-	this.hitEnemyCallback = function(a_animal, a_enemy)
+	else if(body.sprite.key == "animals")
 	{
-		//p2 physics happen here
-		leaveDots = false;
-		a_enemy.destroy();
-	};
+		body.sprite.destroy();
+	}
 
-	this.hitGroundCallback = function(a_animal, a_ground)
+	else if(body.sprite.key == "ground")
 	{
-		leaveDots = false;
-		velocity = a_animal.body.velocity;
-		a_animal.angle += velocity.x/30;
 
-		if(velocity.x > 0)
-		{
-			a_animal.body.velocity.x -= 2.5;
-			if(a_animal.body.velocity.x <= 0)
-			{
-				currentAnimal.reset();
-			}
-		}
-		else 
-		{
-			a_animal.body.velocity.x += 2.5;
-			if(a_animal.body.velocity.x >= 0)
-			{
-				currentAnimal.reset();
-			}
-		}
-	};
+	}
 }

@@ -10,40 +10,53 @@ var addToDots1 = true;
 function preload()
 {
 	//scenery
-	game.load.image("sky", "assets/background/sky.png");
-	game.load.image("clouds", "assets/background/clouds2.png");
-	game.load.image("big_rock", "assets/background/foliagePack_054.png");
-	game.load.image("small_rock", "assets/background/foliagePack_055.png");
-	game.load.image("big_bush", "assets/background/foliagePack_051.png");
-	game.load.image("small_bush", "assets/background/foliagePack_053.png");
-	game.load.image("tree_1", "assets/background/tree02.png");
-	game.load.image("tree_2", "assets/background/tree10.png");
-	game.load.image("debris_1", "assets/sprites/debrisWood_1.png");
-	game.load.image("debris_2", "assets/sprites/debrisWood_2.png");
-	game.load.image("debris_3", "assets/sprites/debrisWood_3.png");
+	game.load.path = "assets/";
+
+	game.load.image("sky", "background/sky.png");
+	game.load.image("clouds", "background/clouds2.png");
+	game.load.image("big_rock", "background/foliagePack_054.png");
+	game.load.image("small_rock", "background/foliagePack_055.png");
+	game.load.image("big_bush", "background/foliagePack_051.png");
+	game.load.image("small_bush", "background/foliagePack_053.png");
+	game.load.image("tree_1", "background/tree02.png");
+	game.load.image("tree_2", "background/tree10.png");
+	game.load.image("debris_1", "sprites/debrisWood_1.png");
+	game.load.image("debris_2", "sprites/debrisWood_2.png");
+	game.load.image("debris_3", "sprites/debrisWood_3.png");
 
 	//launch indicator
-	game.load.image("arrow_empty", "assets/sprites/tank_arrowEmpty.png");
-	game.load.image("arrow_full", "assets/sprites/tank_arrowFull.png");
+	game.load.image("arrow_empty", "sprites/tank_arrowEmpty.png");
+	game.load.image("arrow_full", "sprites/tank_arrowFull.png");
 
 	//travel line dots
-	game.load.image("travelDot", "assets/sprites/tank_explosion9.png");
+	game.load.image("travelDot", "sprites/tank_explosion9.png");
 
 	//spritesheets
-	game.load.spritesheet("ground","assets/background/treeLeaves_retina.png", 128, 128);
-	game.load.spritesheet("animals", "assets/sprites/round_nodetails_outline.png", 71.5, 71.5);
-	game.load.atlasXML("blocks", "assets/sprites/spritesheet_wood.png", "assets/sprites/spritesheet_wood.xml");
+	game.load.spritesheet("ground","background/treeLeaves_retina.png", 128, 128);
+	game.load.spritesheet("animals", "sprites/round_nodetails_outline.png", 71.75, 71.75);
+	game.load.atlasXML("blocks", "sprites/spritesheet_wood.png", "sprites/spritesheet_wood.xml");
+
+	//audio
+	game.load.audio('main_theme', "audio/main_theme.ogg");
+
+	game.renderer.setTexturePriority(["animals", "blocks", "ground", "travelDot", "sky", "clouds"]);
 }
 
 function create()
 {
-	//switch to P2
-	game.physics.startSystem(Phaser.Physics.ARCADE);
-	game.physics.arcade.gravity.y = 300;
+	game.physics.startSystem(Phaser.Physics.P2JS);
+	game.physics.p2.setImpactEvents(true);
+	game.physics.p2.gravity.y = 500;
+	game.physics.p2.restitution = 0.5;
 	game.world.setBounds(0, 0, 2000, 750);
+	game.enableDebug = false;
+	game.clearBeforeRender = false;
 
-	//for fps debugging
-	//game.time.advancedTiming = true;
+	music = game.add.audio("main_theme");
+
+	game.sound.setDecodedCallback(music, function(){music.play("", 0, 0.3, true);}, this)
+
+	game.physics.p2.updateBoundsCollisionGroup();
 
 	background = new Background();
 	background.generateGround();
@@ -72,19 +85,8 @@ function update()
 	{	
 		game.origDragPoint = null
 	}
-
-	game.physics.arcade.collide(animal, ground, currentAnimal.hitGroundCallback);
-	game.physics.arcade.collide(animal, obstacles, currentAnimal.hitObstacleCallback);
-	game.physics.arcade.collide(animal, enemies, currentAnimal.hitEnemyCallback);
-	game.physics.arcade.collide(obstacles, ground);
-	game.physics.arcade.collide(obstacles, enemies);
-	game.physics.arcade.collide(obstacles);
-	game.physics.arcade.collide(enemies);
-	game.physics.arcade.collide(enemies, ground);
 }
 
 function render()
 {
-	//for fps debugging.
- 	//game.debug.text(game.time.fps, 50, 50);
 }

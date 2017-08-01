@@ -21,7 +21,8 @@ function Arrow()
 			if(game.input.activePointer.leftButton.isDown && animal.input.pointerOver())
 			{
 				arrow.visible = true;
-				arrowFill.visible = true;		
+				arrowFill.visible = true;
+				game.camera.reset();	
 			}
 			else if(game.input.activePointer.leftButton.isUp && arrow.visible)
 			{
@@ -33,8 +34,9 @@ function Arrow()
 
 			if(arrow.visible)
 			{
-				arrow.rotation = game.physics.arcade.angleBetween(game.input.mousePointer, arrow); //rotation offset
-				power = game.physics.arcade.distanceBetween(game.input.mousePointer, arrow);
+				//switch to p2
+				arrow.rotation = game.input.mousePointer.position.angle(new Phaser.Point(250, 595));
+				power = game.input.mousePointer.position.distance(new Phaser.Point(250, 595)); 
 				if(power > 180)
 				{
 					power = 180;
