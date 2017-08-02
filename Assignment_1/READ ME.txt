@@ -14,8 +14,8 @@ this are audio, spritesheets, tweening and vector calculations.
 
 Some more advanced examples are the texture cropping for the arrow indicator, 
 this is something I wanted to know how to do as it is extremely handy when developing 
-mobile games (progress bars & health bars etc.), and some light optimalization 
-(disabling debug and clearBeforeRender, setting texture priorities etc.)
+mobile games (progress bars & health bars etc), and some light optimalization 
+(disabling debug and clearBeforeRender).
 
 The code itself is still very messy and not of sufficient production quality. However
 I am sure that I can learn to produce better and more structured code when provided

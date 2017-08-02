@@ -18,12 +18,26 @@ function Animal(posX, posY, spriteIndex)
 		if(traveling)
 		{
 			this.leaveDots();
-		}
 
-		if(animal.x > 2000 || animal.x < 0)
-		{
-			//was considering onOutOfBounds but decided against it for Y coordinate reasons.
-			this.reset();
+			if(animal.x > 2050 || animal.x < 0)
+			{
+				//was considering onOutOfBounds but decided against it for Y coordinate reasons.
+				if(addToDots1)
+				{
+					dots2.destroy(true, true);
+				}
+				else 
+				{
+					dots1.destroy(true, true);
+				}
+				game.time.events.add(Phaser.Timer.SECOND *2, this.reset, this);
+				traveling = false;
+			}
+			else if(animal.body.velocity.x > -2 && animal.body.velocity.x < 2)
+			{
+				game.time.events.add(Phaser.Timer.SECOND *2, this.reset, this);
+				traveling = false;
+			}
 		}
 	};
 
@@ -60,6 +74,7 @@ function Animal(posX, posY, spriteIndex)
 
 	this.launch = function()
 	{
+		launch_effect.play("", 0, 0.75. false);
 		animal.body.static = false;
 		velocity = new Phaser.Point((Math.cos(game.math.degToRad(arrow.angle)) * (power*7.5)), (Math.sin(game.math.degToRad(arrow.angle)) * (power*7.5)));
 		animal.body.velocity.x = velocity.x;
@@ -85,6 +100,21 @@ function Animal(posX, posY, spriteIndex)
 
 	this.reset = function ()
 	{
+		animal.reset(250, 595);
+		animal.body.static = true;
+		traveling = false;
+		leaveDots = false;
+		game.camera.reset();
+		animal.body.angle = 0;
+		animal.body.damping = 0;
+	};
+}
+
+function collisionCallback (body, shapea, shapeb, equation)
+{	
+	if(body)
+	{
+		leaveDots = false;
 		if(addToDots1)
 		{
 			dots2.destroy(true, true);
@@ -93,56 +123,50 @@ function Animal(posX, posY, spriteIndex)
 		{
 			dots1.destroy(true, true);
 		}
-		animal.reset(250, 595);
-		animal.body.static = true;
-		traveling = false;
-		leaveDots = false;
-		game.camera.reset();
-		animal.body.angle = 0;
-	};
-}
-
-function collisionCallback (body, bodyb, shapea, shapeb, equation)
-{
-	leaveDots = false;
-	//better way for this
-	if(body.sprite.key == "blocks")
-	{
-		if(body.sprite.frame == 51 || body.sprite.frame == 47)
+		//better way for this
+		if(body.sprite.key == "blocks")
 		{
+			hit_wood.play("", 0, 0.5, false);
+			if(body.sprite.frame == 51 || body.sprite.frame == 47)
+			{
+				emitter.x = body.sprite.x;
+				emitter.y = body.sprite.y;
+				emitter.start(true, 1500, null, 5);
+				body.sprite.destroy();
+			}
+			else {
+				//if the sprite sheet was organized better a_obstacle.frame++ could be used instead of if statement mess.
+				if(body.sprite.frame == 24)
+				{
+					body.sprite.frame = 51;
+				}
+
+				if(body.sprite.frame == 19)
+				{
+					body.sprite.frame = 24;
+				}
+
+				if(body.sprite.frame == 15)
+				{
+					body.sprite.frame = 47;
+				}
+				
+				if(body.sprite.frame == 12)
+				{
+					body.sprite.frame = 15;
+				}
+			}
+		}
+
+		else if(body.sprite.key == "animals")
+		{
+			hit_pig.play("", 0, 0.5, false);
 			body.sprite.destroy();
 		}
-		else {
-			//if the sprite sheet was organized better a_obstacle.frame++ could be used instead of if statement mess.
-			if(body.sprite.frame == 24)
-			{
-				body.sprite.frame = 51;
-			}
 
-			if(body.sprite.frame == 19)
-			{
-				body.sprite.frame = 24;
-			}
-
-			if(body.sprite.frame == 15)
-			{
-				body.sprite.frame = 47;
-			}
-			
-			if(body.sprite.frame == 12)
-			{
-				body.sprite.frame = 15;
-			}
+		else if(body.sprite.key == "ground")
+		{
+			animal.body.damping = 0.5;
 		}
-	}
-
-	else if(body.sprite.key == "animals")
-	{
-		body.sprite.destroy();
-	}
-
-	else if(body.sprite.key == "ground")
-	{
-
 	}
 }
